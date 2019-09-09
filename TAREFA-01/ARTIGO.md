@@ -40,12 +40,77 @@ Atualemnte o Kotlin é compatível com os seguintes sistemas:
   </p> <br><br>
 <p> <b> Quadro comparativo </b>
   
-  </p> <br><br>
-<p> <b> </b>
-  
-  </p> <br><br>
-<p> <b> </b>
-  
-  </p> <br><br>
-<p> <b> </b>
+Uma comparação que podemos fazer entre o Kotlin e outras linguagens se dá na redigibilidade e expressividade. Utilizando uma comparação com uma linguagem similar, pode-se observar uma diferença significativa quanto a quantidade de código para uma mesma função e a maior possibilidade de entendimento no segundo código, que visa tratar os possíveis erros gerados com o mapeamento HTTP.
  
+<pre> <code class="language-java">
+
+//java
+public Product parseProduct(Response response){
+   if (response == null){
+       throw new ClientException(&quot;Response is null&quot;);
+   }
+   int code = response.code();
+   if (code == 200 || code == 201){
+       return mapToDTO(response.body());
+   }
+   if (code &gt;= 400 &amp;&amp; code &lt;= 499){
+       throw new ClientException(&quot;Sent an invalid request&quot;);
+   }
+   if (code &gt;= 500 &amp;&amp; code &lt;= 599){
+       throw new ClientException(&quot;Server error&quot;);
+   }
+   throw new ClientException(&quot;Error. Code &quot; + code);
+}
+</code></pre>
+
+<pre><code class="language-kotlin">
+
+// Kotlin
+fun parseProduct(response: Response?) = when (response?.code()){
+   null -&gt; throw ClientException(&quot;Response is null&quot;)
+   200, 201 -&gt; mapToDTO(response.body())
+   in 400..499 -&gt; throw ClientException(&quot;Sent an invalid request&quot;)
+   in 500..599 -&gt; throw ClientException(&quot;Server error&quot;)
+   else -&gt; throw ClientException(&quot;Error. Code ${response.code()}&quot;)
+}
+</code></pre>
+
+</p> <br><br>
+
+</pre><b>2. O próximo exemplo compara o mesmo trecho de código em Java e em Kotlin onde a caracteristica de redigibilidade está fortemente presente no segundo código: </b>
+  
+  <pre><code class="language-java">
+  
+  //Java
+  
+   private String lastName;
+
+   public String getFirstName() {
+       return firstName;
+   }
+
+   public void setFirstName(String firstName) {
+       this.firstName = firstName;
+   }
+
+   public String getLastName() {
+       return lastName;
+   }
+
+   public void setLastName(String lastName) {
+       this.lastName = lastName;
+   }
+</pre>
+<pre class="prettyprint">
+
+//Kotlin
+
+class User {
+   var firstName: String? = null
+
+   var lastName: String? = null
+}</pre>
+
+<br><br> <p>
+ 
+ </p>
